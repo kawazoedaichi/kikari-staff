@@ -117,14 +117,17 @@
     <div class="bg-white rounded-xl border border-gray-200 p-2.5 shadow-sm space-y-2">
       <div class="flex items-center gap-1.5">
         <div class="inline-flex rounded-lg bg-zinc-100 p-0.5 border border-zinc-200 shrink-0">
-          <button type="button" onclick="switchArea('kanto')" id="area-kanto" class="px-2.5 py-1 rounded-md text-[11px] sm:text-xs font-black bg-zinc-900 text-orange-400 shadow-sm transition">
+          <button type="button" onclick="switchArea('all')" id="area-all" class="px-2.5 py-1 rounded-md text-[11px] sm:text-xs font-black bg-zinc-900 text-orange-400 shadow-sm transition">
+            全国
+          </button>
+          <button type="button" onclick="switchArea('kanto')" id="area-kanto" class="px-2.5 py-1 rounded-md text-[11px] sm:text-xs font-bold text-gray-600 hover:text-gray-900 transition">
             関東
           </button>
           <button type="button" onclick="switchArea('kansai')" id="area-kansai" class="px-2.5 py-1 rounded-md text-[11px] sm:text-xs font-bold text-gray-600 hover:text-gray-900 transition">
             関西
           </button>
           <button type="button" onclick="switchArea('other')" id="area-other" class="px-2.5 py-1 rounded-md text-[11px] sm:text-xs font-bold text-gray-600 hover:text-gray-900 transition">
-            その他・未判定
+            未反映
           </button>
         </div>
         <input type="text" id="searchInput" oninput="onSearchInput()" placeholder="氏名・TEL・エリア・資格で検索..."
@@ -578,7 +581,7 @@
 
   var state = {
     currentTab: 'within3days',
-    currentArea: 'kanto',
+    currentArea: 'all',
     displayLimit: PAGE_SIZE,
     rawCandidates: [],
     mergedCandidates: [],
@@ -1810,7 +1813,7 @@
     // ④ 激熱掘起の2通目（翌日リマインド）は常に短縮版で送る（「先日お送りさせていただきました」に変更）
     if (tab === 'hot' && log && log.status === 'reminded') {
       return [
-        sal.text + ' 以前ご応募いただきました、株式会社NEXTスタッフサービス　採用コンサルタントです。',
+        sal.text + ' お世話になっております。株式会社NEXTスタッフサービス　採用コンサルタントです。',
         '先日お送りさせていただきました募集案件ですが、枠が埋まりやすくなっているため念のためご連絡いたしました。',
         shortJobs,
         shortRateNote,
@@ -1824,7 +1827,7 @@
           ? '先日、応募いただきました求人ですが充足してしまったと報告ありました。近場で求人が中々無く、少し距離のあるエリアにはなってしまいますがご検討可能でしょうか？'
           : '以前伺っていた希望条件ですが、近場で求人が中々無く、少し距離のあるエリアにはなってしまいますがご検討可能でしょうか？';
         return [
-          sal.text + ' お世話になります。株式会社NEXTスタッフサービス　採用コンサルタントです。',
+          sal.text + ' お世話になっております。株式会社NEXTスタッフサービス　採用コンサルタントです。',
           farIntroShort,
           shortJobs,
           shortRateNote,
@@ -1864,7 +1867,7 @@
       }
       if (tab === 'hot') {
         return [
-          sal.text + ' 以前ご応募いただきました、株式会社NEXTスタッフサービス　採用コンサルタントです。',
+          sal.text + ' お世話になっております。株式会社NEXTスタッフサービス　採用コンサルタントです。',
           'ご希望条件に合う新着案件が入りましたので優先的にご連絡いたしました！',
           shortJobs,
           shortRateNote,
@@ -1872,7 +1875,7 @@
         ].join(LF);
       }
       return [
-        sal.text + ' 以前ご応募いただきました、株式会社NEXTスタッフサービス　採用コンサルタントです。',
+        sal.text + ' お世話になっております。株式会社NEXTスタッフサービス　採用コンサルタントです。',
         'その後お仕事のご状況はいかがでしょうか？新しい募集枠が出ておりますのでご案内いたします！',
         shortJobs,
         shortRateNote,
@@ -1913,8 +1916,7 @@
 
       return [
         sal.text, '',
-        'お世話になります。',
-        '株式会社NEXTスタッフサービス　採用コンサルタントです。', ''
+        'お世話になっております。株式会社NEXTスタッフサービス　採用コンサルタントです。', ''
       ].concat(farLeadLines).concat([
         '現在ご自宅から通える範囲内で、条件に近い以下の募集が出ております。', '',
         bodyJobs, '',
@@ -1973,7 +1975,7 @@
     if (tab === 'hot') {
       return [
         sal.text, '',
-        '以前ご応募いただきました、株式会社NEXTスタッフサービス　採用コンサルタントです。',
+        'お世話になっております。株式会社NEXTスタッフサービス　採用コンサルタントです。',
         '以前お話しさせていただいたご希望条件にぴったりの新着案件が入りましたので、優先的にご連絡いたしました！', '',
         bodyJobs, '',
         rateNote, '',
@@ -1985,7 +1987,7 @@
     // ⑤ 通常掘起
     return [
       sal.text, '',
-      '以前ご応募いただきました、株式会社NEXTスタッフサービス　採用コンサルタントです。',
+      'お世話になっております。株式会社NEXTスタッフサービス　採用コンサルタントです。',
       'その後、お仕事のご状況はいかがでしょうか？', '',
       '現在、ご希望に合いそうな新しい募集枠が出ておりますのでご案内いたします。', '',
       bodyJobs, '',
@@ -2178,7 +2180,7 @@
   window.switchArea = function(areaId) {
     state.currentArea = areaId;
     state.displayLimit = PAGE_SIZE;
-    ['kanto', 'kansai', 'other'].forEach(function(id) {
+    ['all', 'kanto', 'kansai', 'other'].forEach(function(id) {
       var btn = document.getElementById('area-' + id);
       if (!btn) return;
       btn.className = id === areaId
@@ -2266,7 +2268,7 @@
 
     var container = document.getElementById('candidateList');
     if (visibleList.length === 0) {
-      container.innerHTML = '<div class="bg-white rounded-2xl border border-gray-200 p-10 text-center text-gray-500 text-xs space-y-2"><p class="font-bold text-sm text-gray-700">該当する追客対象者はありません</p><p>エリア切替（関東 / 全エリア）や「未対応のみ表示」のチェックを外して確認できます。</p></div>';
+      container.innerHTML = '<div class="bg-white rounded-2xl border border-gray-200 p-10 text-center text-gray-500 text-xs space-y-2"><p class="font-bold text-sm text-gray-700">該当する追客対象者はありません</p><p>エリア切替（全国 / 関東 / 関西 / 未反映）や「未対応のみ表示」のチェックを外して確認できます。</p></div>';
       return;
     }
 
@@ -2859,7 +2861,7 @@
     if (!list || list.length === 0) { alert('出力対象のデータが0件です。'); return; }
     var tabNames = { within3days: '3日以内未FIX', unfixed: '未FIX人材', hot: '激熱掘起', future: '未来人材', normal: '通常掘起' };
     var dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-    var areaLabel = state.currentArea === 'kanto' ? '関東' : (state.currentArea === 'kansai' ? '関西' : 'その他・未判定');
+    var areaLabel = state.currentArea === 'all' ? '全国' : (state.currentArea === 'kanto' ? '関東' : (state.currentArea === 'kansai' ? '関西' : '未反映'));
     var tabLabel = customLabel || tabNames[state.currentTab] || '追客';
 
     if (smsSlimOnly) {
