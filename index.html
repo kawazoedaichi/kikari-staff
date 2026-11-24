@@ -1133,6 +1133,21 @@
     try { var x = localStorage.getItem(STORAGE_KEYS.EXCLUDED_LIST); if (x) state.excludedMap = JSON.parse(x); } catch (e) {}
     try { var g = localStorage.getItem(STORAGE_KEYS.GSI_CACHE); if (g) state.gsiCache = JSON.parse(g); } catch (e) {}
     try { var s = localStorage.getItem(STORAGE_KEYS.SETTINGS); if (s) state.settings = Object.assign({}, state.settings, JSON.parse(s)); } catch (e) {}
+    // 2026-11-24: 自分のGitHubトークンが未設定なら、同一オリジンのスタッフ管理アプリ（bstyle_staff_settings_v5）の保存済みトークンを引き継ぐ。リポジトリ未設定時も既定値を補う。
+    if (!state.settings.ghToken || !state.settings.ghRepo) {
+      var changed = false;
+      if (!state.settings.ghRepo) { state.settings.ghRepo = 'kawazoedaichi/kikari-staff'; changed = true; }
+      if (!state.settings.ghToken) {
+        try {
+          var bs = localStorage.getItem('bstyle_staff_settings_v5');
+          if (bs) {
+            var btk = (JSON.parse(bs) || {}).ghToken;
+            if (btk) { state.settings.ghToken = btk; changed = true; }
+          }
+        } catch (e) {}
+      }
+      if (changed) { try { localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(state.settings)); } catch (e) {} }
+    }
 
     var elExt = document.getElementById('externalDataUrlInput');
     if (elExt) elExt.value = state.settings.externalDataUrl || '';
